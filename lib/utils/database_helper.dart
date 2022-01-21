@@ -1,9 +1,8 @@
 import 'dart:io';
-
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sql_database_example/models/apartment_model.dart';
-import 'package:path/path.dart';
 
 class DatabaseHelper {
   static const _databaseName = 'ApartmentDetail.db';
@@ -38,7 +37,7 @@ class DatabaseHelper {
   }
 
   Future<int> insertApartmentDetail(ApartmentDetail apartmentDetail) async {
-    Database db = await _database!;
+    Database db = _database!;
     return await db.insert(
       ApartmentDetail.tblApartmentDetail,
       apartmentDetail.toMap(),
@@ -46,14 +45,14 @@ class DatabaseHelper {
   }
 
   Future<int> updateApartmentDetail(ApartmentDetail apartmentDetail) async {
-    Database db = await _database!;
+    Database db = _database!;
     return await db.update(
         ApartmentDetail.tblApartmentDetail, apartmentDetail.toMap(),
         where: '${ApartmentDetail.colId}=?', whereArgs: [apartmentDetail.id]);
   }
 
   Future<int> deleteApartmentDetail(int id) async {
-    Database db = await _database!;
+    Database db = _database!;
     return await db.delete(ApartmentDetail.tblApartmentDetail,
         where: '${ApartmentDetail.colId}=?', whereArgs: [id]);
   }
@@ -64,6 +63,8 @@ class DatabaseHelper {
         await db.query(ApartmentDetail.tblApartmentDetail);
     return apartmentDetails.isEmpty
         ? []
-        : apartmentDetails.map((e) => ApartmentDetail.fromMap(e)).toList();
+        : apartmentDetails
+            .map((e) => ApartmentDetail.fromMap(e as Map<String, dynamic>))
+            .toList();
   }
 }

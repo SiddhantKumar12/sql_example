@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sql_database_example/utils/database%20helper.dart';
+
+import 'package:sql_database_example/utils/database_helper.dart';
 
 import 'models/apartment_model.dart';
 
@@ -23,7 +24,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       _dbHelper = DatabaseHelper.instance;
@@ -52,21 +52,21 @@ class _HomePageState extends State<HomePage> {
             children: [
               TextFormField(
                 controller: _controlName,
-                decoration: InputDecoration(labelText: 'Full Name'),
-                onSaved: (val) => setState(
-                  () => _apartmentDetail.ownerName = val!,
-                ),
+                decoration: const InputDecoration(labelText: 'Full Name'),
+                // onSaved: (val) => setState(
+                //   () => _apartmentDetail.ownerName = val!,
+                // ),
                 validator: (val) =>
-                    val!.length <= 2 ? 'This field is required' : null,
+                    val!.isEmpty ? 'This field is required' : null,
               ),
               TextFormField(
                 controller: _controlPhoneNumber,
-                decoration: InputDecoration(labelText: 'Phone Number'),
-                onSaved: (val) => setState(
-                  () => _apartmentDetail.phoneNumber = val!,
-                ),
+                decoration: const InputDecoration(labelText: 'Phone Number'),
+                // onChanged: (val) => setState(
+                //   () => _apartmentDetail.phoneNumber = val,
+                // ),
                 validator: (val) =>
-                    val!.length < 0 ? 'This field is required' : null,
+                    val!.isEmpty ? 'This field is required' : null,
               ),
               Container(
                 margin: EdgeInsets.all(10),
@@ -92,18 +92,18 @@ class _HomePageState extends State<HomePage> {
   _onSubmit() async {
     var form = _formKey.currentState;
     if (form!.validate()) {
-      form.save();
-      if (_apartmentDetail.id == null)
-        await _dbHelper.insertApartmentDetail(_apartmentDetail);
-      else
+      if (_apartmentDetail.id == null) {
+        await _dbHelper.insertApartmentDetail(
+          ApartmentDetail(
+            id: DateTime.now().millisecondsSinceEpoch,
+            ownerName: _controlName.text,
+            phoneNumber: _controlPhoneNumber.text,
+          ),
+        );
+      } else {
         await _dbHelper.updateApartmentDetail(_apartmentDetail);
-      await _dbHelper.insertApartmentDetail(_apartmentDetail);
+      }
       _refreshApartmentList();
-      // setState(() {
-      //   _apartmentDetails.add(ApartmentDetail(
-      //       ownerName: _apartmentDetail.ownerName,
-      //       phoneNumber: _apartmentDetail.phoneNumber));
-      // });
       _resetForm();
     }
   }
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                   title: Text(datadetail.ownerName!.toUpperCase()),
                   subtitle: Text(datadetail.phoneNumber!),
                   trailing: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete,
                       color: Colors.orange,
                     ),
