@@ -2,18 +2,11 @@ class ApartmentDetail {
   int? id;
   String? ownerName;
   String? phoneNumber;
-  // String? apartmentNumber;
-  // String? vehicleNumber;
-  // String? maintenanceCharges;
 
   ApartmentDetail({
     this.id,
     this.ownerName,
     this.phoneNumber,
-    // this.apartmentNumber,
-    //
-    // this.vehicleNumber,
-    // this.maintenanceCharges
   });
 
   static const tblApartmentDetail = 'Apartment';

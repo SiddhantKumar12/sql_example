@@ -53,18 +53,12 @@ class _HomePageState extends State<HomePage> {
               TextFormField(
                 controller: _controlName,
                 decoration: const InputDecoration(labelText: 'Full Name'),
-                // onSaved: (val) => setState(
-                //   () => _apartmentDetail.ownerName = val!,
-                // ),
                 validator: (val) =>
                     val!.isEmpty ? 'This field is required' : null,
               ),
               TextFormField(
                 controller: _controlPhoneNumber,
                 decoration: const InputDecoration(labelText: 'Phone Number'),
-                // onChanged: (val) => setState(
-                //   () => _apartmentDetail.phoneNumber = val,
-                // ),
                 validator: (val) =>
                     val!.isEmpty ? 'This field is required' : null,
               ),
